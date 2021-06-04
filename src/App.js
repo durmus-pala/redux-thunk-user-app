@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { connect } from "react-redux";
+import "./App.css";
+import { getUserInfos } from "./redux/actions/Actions";
+import UserCard from "./components/UserCard";
 
-function App() {
+function App({ users, loading, getUserInfos }) {
+  useEffect(() => {
+    getUserInfos();
+  }, [getUserInfos]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Clarusway Students</h1>
+      <UserCard users={users} loading={loading} />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    users: state.users,
+    loading: state.loading,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserInfos: () => dispatch(getUserInfos()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
